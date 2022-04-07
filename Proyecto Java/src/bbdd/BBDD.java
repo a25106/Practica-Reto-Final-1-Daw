@@ -24,6 +24,8 @@ public class BBDD {
      * @throws java.sql.SQLException
      */
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
+
+        //Numero para la ID de Person
         int rndm = (int)(Math.random()*Math.pow(10, 10));
         System.out.println(rndm);
         Scanner scan = new Scanner(System.in);
