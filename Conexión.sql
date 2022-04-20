@@ -2,8 +2,8 @@ conn sys as sysdba
 
 alter system set local_listener = '127.0.0.1:1521' scope=memory;
 
-create user toskan identified by user;
+create user usuario identified by usuario;
 
-grant connect to user;
+grant connect to usuario;
 
-grant resource to user;
+grant resource to usuario;
