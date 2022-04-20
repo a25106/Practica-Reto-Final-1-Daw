@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author A7-PC00
+ * @author Ángel Gaudes y Samuel Aranda
  */
 public class BBDD {
 
@@ -51,10 +51,11 @@ public class BBDD {
                 }
             }
             while (logged) {
-                System.out.println("\nElige una opción:\n(M) Modificar datos de usuario\n(L) Lista y Vista Detalle\n(B) Búsqueda de productos\n(C) Comprar Producto\n(F) Finalizar Sesión");
                 if (verifyAdmin(stmt)) {
-                    System.out.println("(E) Eliminar producto");
-                }
+                    System.out.println("\nElige una opción:\n(M) Modificar datos de usuario\n(L) Lista y Vista Detalle\n(B) Búsqueda de productos\n(C) Comprar Producto\n(E) Eliminar producto\n(F) Finalizar Sesión");
+                } else {
+                    System.out.println("\nElige una opción:\n(M) Modificar datos de usuario\n(L) Lista y Vista Detalle\n(B) Búsqueda de productos\n(C) Comprar Producto\n(F) Finalizar Sesión");
+                };
                 switch (scan.nextLine().toUpperCase()) {
                     case "M":
                         modifyUser(stmt);
@@ -222,7 +223,8 @@ public class BBDD {
                             + "Usuario: " + resU.getString(6) + "\n"
                             + "Contraseña: " + resU.getString(7) + "\n"
                             + "Fecha de Nacimiento: " + resU.getString(8) + "\n"
-                            + "Género: " + resU.getString(9));
+                            + "Género: " + resU.getString(9) + "\n"
+                            + "Administrador: " + (verifyAdmin(stmt) ? "Sí" : "No"));
                 }
                 break;
             case "P":
@@ -230,7 +232,9 @@ public class BBDD {
                 boolean first = resP.next();
                 if (!first) {
                     System.out.println("\u001B[31m\nNo hay ninguna aplicación disponible\u001B[0m");
+                    return;
                 }
+                int count = 0;
                 while (first || resP.next()) {
                     first = false;
                     System.out.println("\nID: " + resP.getString(1) + "\n"
@@ -239,7 +243,9 @@ public class BBDD {
                             + "Descripción: " + resP.getString(4) + "\n"
                             + "Precio: " + resP.getString(5) + "€\n"
                             + "Categoría: " + resP.getString(6));
+                    count++;
                 }
+                System.out.println("\nNúmero de aplicaciones: " + count);
                 break;
         }
 
@@ -252,7 +258,9 @@ public class BBDD {
         boolean first = res.next();
         if (!first) {
             System.out.println("\u001B[31m\nNo hay ninguna aplicación disponible\u001B[0m");
+            return;
         }
+        int count = 0;
         while (first || res.next()) {
             first = false;
             System.out.println("\nID: " + res.getString(1) + "\n"
@@ -261,7 +269,9 @@ public class BBDD {
                     + "Descripción: " + res.getString(4) + "\n"
                     + "Precio: " + res.getString(5) + "€\n"
                     + "Categoría: " + res.getString(6));
+            count++;
         }
+        System.out.println("\nNúmero de aplicaciones encontradas: " + count);
     }
 
     private static void buyProduct(Statement stmt) throws SQLException {
@@ -301,6 +311,6 @@ public class BBDD {
 
     private static void closeSession() {
         logged = false;
-        System.out.println("Sesión finalizada correctamente");
+        System.out.println("\u001B[32m\nSesión finalizada correctamente\u001B[0m");
     }
 }
