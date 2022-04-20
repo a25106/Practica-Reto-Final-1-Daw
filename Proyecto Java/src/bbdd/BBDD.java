@@ -21,6 +21,7 @@ public class BBDD {
 
     static boolean logged = false;
     static String loggedID = null;
+    //Variable que se refiere a los administradores 
     static String[] admins = {"Nicolai"};
     static Scanner scan = new Scanner(System.in);
 
@@ -90,6 +91,9 @@ public class BBDD {
         }
     }
 
+    /**
+     * Registra al usuario 
+     */
     private static String registerPerson(Statement stmt) throws SQLException {
         int rndm = (int) (Math.random() * Math.pow(10, 10));
         while (stmt.executeQuery("Select ID_Person from person where ID_Person = " + rndm).next()) {
@@ -131,6 +135,9 @@ public class BBDD {
         return "INSERT INTO person (ID_Person, Name, Surnames, Email, Adress, Phone, Username, Password, Birth_Date, Gender)" + "Values( '" + rndm + "', '" + name + "', '" + surnames + "', '" + email + "', '" + adress + "', '" + phone + "', '" + username + "', '" + password + "', DATE '" + birth_date + "', '" + gender + "')";
     }
 
+    /**
+     * Logea al usuario registrado anteriormente 
+     */
     private static boolean loginPerson(Statement stmt) throws SQLException {
         System.out.println("\nEscribe el usuario o email");
         String useremail = scan.nextLine();
@@ -163,6 +170,9 @@ public class BBDD {
         }
     }
 
+    /**
+     * Permite modificar los datos del usuario 
+     */
     private static void modifyUser(Statement stmt) throws SQLException {
         System.out.println("\nElige qué quieres modificar:\n(N) Nombre\n(A) Apellidos\n(E) Email\n(D) Dirección\n(T) Teléfono\n(U) Usuario\n(C) Contraseña\n(F) Fecha de Nacimiento\n(G) Género");
         switch (scan.nextLine().toUpperCase()) {
@@ -209,6 +219,9 @@ public class BBDD {
         System.out.println("\nModificado correctamente\n");
     }
 
+    /**
+     * Lista la información completa de los usuarios registrados y los productos en venta 
+     */
     private static void listInfo(Statement stmt) throws SQLException {
         System.out.println("\nElige qué quieres visualizar:\n(U) Información de tu Usuario\n(P) Informacion de los Productos");
         switch (scan.nextLine().toUpperCase()) {
@@ -251,6 +264,9 @@ public class BBDD {
 
     }
 
+    /**
+     * Permite hacer una búsqueda de los productos disponibles en la tienda 
+     */
     private static void searchProducts(Statement stmt) throws SQLException {
         System.out.println("\nEscribe tu búsqueda: ");
         String search = scan.nextLine().toUpperCase();
@@ -274,6 +290,9 @@ public class BBDD {
         System.out.println("\nNúmero de aplicaciones encontradas: " + count);
     }
 
+    /**
+     * Permite comprar un producto de la tienda 
+     */
     private static void buyProduct(Statement stmt) throws SQLException {
         System.out.println("\nEscribe el nombre de un producto a comprar: ");
         String search = scan.nextLine();
@@ -286,6 +305,9 @@ public class BBDD {
         }
     }
 
+    /**
+     * A la persona que es administradora le permite borrar productos que estan disponibles en la tienda
+     */
     private static void deleteProduct(Statement stmt) throws SQLException {
         if (verifyAdmin(stmt)) {
             System.out.println("\nEscribe la ID de un producto a eliminar: ");
@@ -304,11 +326,17 @@ public class BBDD {
         }
     }
 
+    /**
+     * Verifica la identidad del usuario para saber si es administrador o no 
+     */
     private static boolean verifyAdmin(Statement stmt) throws SQLException {
         ResultSet res = stmt.executeQuery("Select Username from Person where ID_Person = " + loggedID);
         return Arrays.asList(admins).contains(res.next() ? res.getString(1) : null);
     }
 
+    /**
+     * Permite cerrar la sesión del usuario en la tienda 
+     */
     private static void closeSession() {
         logged = false;
         System.out.println("\u001B[32m\nSesión finalizada correctamente\u001B[0m");
